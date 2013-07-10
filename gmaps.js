@@ -6,8 +6,8 @@
  * Released under the MIT License.
  */
 
-if (window.google == undefined && window.google.maps == undefined) {
-  throw 'Google Maps API is required. Please register the following JavaScript library http://maps.google.com/maps/api/js?sensor=true.'
+if (window.google === undefined && window.google.maps === undefined) {
+  throw 'Google Maps API is required. Please register the following JavaScript library http://maps.google.com/maps/api/js?sensor=true.';
 }
 
 var extend_object = function(obj, new_obj) {
@@ -32,7 +32,7 @@ var replace_object = function(obj, replace) {
   }
 
   for (name in replace) {
-    if (obj[name] != undefined) {
+    if (obj[name] !== undefined) {
       obj[name] = replace[name];
     }
   }
@@ -92,7 +92,7 @@ var arrayToLatLng = function(coords, useGeoJSON) {
   var i;
 
   for (i = 0; i < coords.length; i++) {
-    if (coords[i].length > 0 && typeof(coords[i][0]) != "number") {
+    if (coords[i].length > 0 && typeof(coords[i][0]) !== "number") {
       coords[i] = arrayToLatLng(coords[i], useGeoJSON);
     }
     else {
@@ -104,14 +104,14 @@ var arrayToLatLng = function(coords, useGeoJSON) {
 };
 
 var getElementById = function(id, context) {
-  var element,
+  var element;
   id = id.replace('#', '');
 
   if ('jQuery' in this && context) {
     element = $("#" + id, context)[0];
   } else {
     element = document.getElementById(id);
-  };
+  }
 
   return element;
 };
@@ -214,7 +214,7 @@ var GMaps = (function(global) {
       delete options[options_to_be_deleted[i]];
     }
 
-    if(options.disableDefaultUI != true) {
+    if(options.disableDefaultUI !== true) {
       map_base_options = extend_object(map_base_options, map_controls_options);
     }
 
@@ -246,15 +246,16 @@ var GMaps = (function(global) {
         }
       }
 
-      if (!getElementById('gmaps_context_menu')) return;
+      if (!getElementById('gmaps_context_menu')) {
+        return;
+      }
 
       var context_menu_element = getElementById('gmaps_context_menu');
       
       context_menu_element.innerHTML = html;
 
       var context_menu_items = context_menu_element.getElementsByTagName('a'),
-          context_menu_items_count = context_menu_items.length
-          i;
+          context_menu_items_count = context_menu_items.length;
 
       for (i = 0; i < context_menu_items_count; i++) {
         var context_menu_item = context_menu_items[i];
@@ -329,7 +330,7 @@ var GMaps = (function(global) {
 
       doc.body.appendChild(ul);
 
-      var context_menu_element = getElementById('gmaps_context_menu')
+      var context_menu_element = getElementById('gmaps_context_menu');
 
       google.maps.event.addDomListener(context_menu_element, 'mouseout', function(ev) {
         if (!ev.relatedTarget || !this.contains(ev.relatedTarget)) {
@@ -350,7 +351,7 @@ var GMaps = (function(global) {
 
     var setupListener = function(object, name) {
       google.maps.event.addListener(object, name, function(e){
-        if (e == undefined) {
+        if (e === undefined) {
           e = this;
         }
 
@@ -381,7 +382,7 @@ var GMaps = (function(global) {
         options.rightclick.apply(this, [e]);
       }
 
-      if(window.context_menu[self.el.id]['map'] != undefined) {
+      if(window.context_menu[self.el.id]['map'] !== undefined) {
         self.buildContextMenu('map', e);
       }
     });
@@ -443,7 +444,7 @@ var GMaps = (function(global) {
         method;
 
     for (method in this.map) {
-      if (typeof(this.map[method]) == 'function' && !this[method]) {
+      if (typeof(this.map[method]) === 'function' && !this[method]) {
         native_methods.push(method);
       }
     }
@@ -511,7 +512,7 @@ GMaps.prototype.addControl = function(options) {
 };
 
 GMaps.prototype.createMarker = function(options) {
-  if (options.lat == undefined && options.lng == undefined && options.position == undefined) {
+  if (options.lat === undefined && options.lng === undefined && options.position === undefined) {
     throw 'No latitude or longitude defined.';
   }
 
@@ -569,7 +570,7 @@ GMaps.prototype.createMarker = function(options) {
       if (options[name]) {
         google.maps.event.addListener(object, name, function(me){
           if(!me.pixel){
-            me.pixel = map.getProjection().fromLatLngToPoint(me.latLng)
+            me.pixel = map.getProjection().fromLatLngToPoint(me.latLng);
           }
           
           options[name].apply(this, [me]);
@@ -598,7 +599,7 @@ GMaps.prototype.createMarker = function(options) {
       options.rightclick.apply(this, [e]);
     }
 
-    if (window.context_menu[self.el.id]['marker'] != undefined) {
+    if (window.context_menu[self.el.id]['marker'] !== undefined) {
       self.buildContextMenu('marker', e);
     }
   });
@@ -685,7 +686,7 @@ GMaps.prototype.removeMarkers = function(collection) {
   var new_markers = [];
 
   for (var i = 0;i < this.markers.length; i++) {
-    if(this.markers[i].getMap() != null) {
+    if(this.markers[i].getMap() !== null) {
       new_markers.push(this.markers[i]);
     }
   }
@@ -699,7 +700,7 @@ GMaps.prototype.drawOverlay = function(options) {
 
   overlay.setMap(this.map);
 
-  if (options.auto_show != null) {
+  if (options.auto_show) {
     auto_show = options.auto_show;
   }
 
@@ -727,7 +728,7 @@ GMaps.prototype.drawOverlay = function(options) {
     for (var ev = 0; ev < stop_overlay_events.length; ev++) {
       (function(object, name) {
         google.maps.event.addDomListener(object, name, function(e){
-          if (navigator.userAgent.toLowerCase().indexOf('msie') != -1 && document.all) {
+          if (navigator.userAgent.toLowerCase().indexOf('msie') !== -1 && document.all) {
             e.cancelBubble = true;
             e.returnValue = false;
           }
@@ -976,7 +977,7 @@ GMaps.prototype.drawPolygon = function(options) {
     map: this.map
   }, options);
 
-  if (useGeoJSON == false) {
+  if (useGeoJSON === false) {
     options.paths = [options.paths.slice(0)];
   }
 
@@ -1153,10 +1154,10 @@ GMaps.prototype.addLayer = function(layerName, options) {
   }
 
   if (layer !== undefined) {
-    if (typeof layer.setOptions == 'function') {
+    if (typeof layer.setOptions === 'function') {
       layer.setOptions(options);
     }
-    if (typeof layer.setMap == 'function') {
+    if (typeof layer.setMap === 'function') {
       layer.setMap(this.map);
     }
 
@@ -1165,7 +1166,7 @@ GMaps.prototype.addLayer = function(layerName, options) {
 };
 
 GMaps.prototype.removeLayer = function(layer) {
-  if (typeof(layer) == "string" && this.singleLayers[layer] !== undefined) {
+  if (typeof(layer) === "string" && this.singleLayers[layer] !== undefined) {
      this.singleLayers[layer].setMap(null);
 
      delete this.singleLayers[layer];
@@ -1517,9 +1518,9 @@ GMaps.prototype.toImage = function(options) {
     
     static_map_options['polyline'] = {};
     static_map_options['polyline']['path'] = google.maps.geometry.encoding.encodePath(polyline.getPath());
-    static_map_options['polyline']['strokeColor'] = polyline.strokeColor
-    static_map_options['polyline']['strokeOpacity'] = polyline.strokeOpacity
-    static_map_options['polyline']['strokeWeight'] = polyline.strokeWeight
+    static_map_options['polyline']['strokeColor'] = polyline.strokeColor;
+    static_map_options['polyline']['strokeOpacity'] = polyline.strokeOpacity;
+    static_map_options['polyline']['strokeWeight'] = polyline.strokeWeight;
   }
 
   return GMaps.staticMapURL(static_map_options);
@@ -1690,7 +1691,7 @@ GMaps.staticMapURL = function(options){
 };
 
 GMaps.prototype.addMapType = function(mapTypeId, options) {
-  if (options.hasOwnProperty("getTileUrl") && typeof(options["getTileUrl"]) == "function") {
+  if (options.hasOwnProperty("getTileUrl") && typeof(options["getTileUrl"]) === "function") {
     options.tileSize = options.tileSize || new google.maps.Size(256, 256);
 
     var mapType = new google.maps.ImageMapType(options);
@@ -1703,7 +1704,7 @@ GMaps.prototype.addMapType = function(mapTypeId, options) {
 };
 
 GMaps.prototype.addOverlayMapType = function(options) {
-  if (options.hasOwnProperty("getTile") && typeof(options["getTile"]) == "function") {
+  if (options.hasOwnProperty("getTile") && typeof(options["getTile"]) === "function") {
     var overlayMapTypeIndex = options.index;
 
     delete options.index;
@@ -1785,7 +1786,7 @@ GMaps.prototype.off = function(event_name) {
 GMaps.custom_events = ['marker_added', 'marker_removed', 'polyline_added', 'polyline_removed', 'polygon_added', 'polygon_removed', 'geolocated', 'geolocation_failed'];
 
 GMaps.on = function(event_name, object, handler) {
-  if (GMaps.custom_events.indexOf(event_name) == -1) {
+  if (GMaps.custom_events.indexOf(event_name) === -1) {
     return google.maps.event.addListener(object, event_name, handler);
   }
   else {
@@ -1802,7 +1803,7 @@ GMaps.on = function(event_name, object, handler) {
 };
 
 GMaps.off = function(event_name, object) {
-  if (GMaps.custom_events.indexOf(event_name) == -1) {
+  if (GMaps.custom_events.indexOf(event_name) === -1) {
     google.maps.event.clearListeners(object, event_name);
   }
   else {
@@ -1811,7 +1812,7 @@ GMaps.off = function(event_name, object) {
 };
 
 GMaps.fire = function(event_name, object, scope) {
-  if (GMaps.custom_events.indexOf(event_name) == -1) {
+  if (GMaps.custom_events.indexOf(event_name) === -1) {
     google.maps.event.trigger(object, event_name, Array.prototype.slice.apply(arguments).slice(2));
   }
   else {
@@ -1951,7 +1952,7 @@ google.maps.Marker.prototype.getId = function() {
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
       "use strict";
-      if (this == null) {
+      if (this === null) {
           throw new TypeError();
       }
       var t = Object(this);
@@ -1962,9 +1963,9 @@ if (!Array.prototype.indexOf) {
       var n = 0;
       if (arguments.length > 1) {
           n = Number(arguments[1]);
-          if (n != n) { // shortcut for verifying if it's NaN
+          if (n !== n) { // shortcut for verifying if it's NaN
               n = 0;
-          } else if (n != 0 && n != Infinity && n != -Infinity) {
+          } else if (n !== 0 && n !== Infinity && n !== -Infinity) {
               n = (n > 0 || -1) * Math.floor(Math.abs(n));
           }
       }
@@ -1978,5 +1979,5 @@ if (!Array.prototype.indexOf) {
           }
       }
       return -1;
-  }
+  };
 }

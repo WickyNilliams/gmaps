@@ -55,11 +55,30 @@ module.exports = function(grunt) {
 
     watch : {
       files : '<%= concat.dist.src %>',
-      tasks : 'default'
+      tasks : 'test'
     },
 
     jshint : {
-      all : ['Gruntfile.js']
+      options : {
+          //restricting
+          "camelcase" : false,
+          "curly" : true,
+          "eqeqeq" : true,
+          "newcap" : true,
+
+          //relaxing
+          "shadow" : true,
+          "sub" : true,
+          "loopfunc" : true,
+          "boss" : true
+      },
+      prebuild : [
+        'Gruntfile.js',
+        'lib/*.js'
+      ],
+      postbuild : [
+        '<%= concat.dist.dest %>'
+      ]
     }
 
   });
@@ -69,6 +88,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
 
-  grunt.registerTask('test', ['jshint', 'jasmine']);
-  grunt.registerTask('default', ['test', 'concat']);
+  grunt.registerTask('test', ['jshint:prebuild', 'jasmine']);
+  grunt.registerTask('default', ['test', 'concat', 'jshint:postbuild']);
 };
