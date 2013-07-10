@@ -60,21 +60,12 @@ module.exports = function(grunt) {
 
     jshint : {
       options : {
-          //restricting
-          "camelcase" : false,
-          "curly" : true,
-          "eqeqeq" : true,
-          "newcap" : true,
-
-          //relaxing
-          "shadow" : true,
-          "sub" : true,
-          "loopfunc" : true,
-          "boss" : true
+          jshintrc : '.jshintrc'
       },
       prebuild : [
         'Gruntfile.js',
-        'lib/*.js'
+        'lib/*.js',
+        'test/spec/*.js'
       ],
       postbuild : [
         '<%= concat.dist.dest %>'
